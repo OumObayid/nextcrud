@@ -1,0 +1,53 @@
+├── .gitignore
+├── app/
+│   ├── favicon.ico
+│   ├── layout.tsx
+│   ├── mysql/
+│   │   ├── api/
+│   │   │   └── products/
+│   │   │       ├── route.ts
+│   │   │       └── [id]/
+│   │   │           └── route.ts
+│   │   └── products/
+│   │       ├── create/
+│   │       │   └── page.tsx
+│   │       ├── edit/
+│   │       │   └── [id]/
+│   │       │       └── page.tsx
+│   │       ├── page.tsx
+│   │       └── view/
+│   │           └── [id]/
+│   │               └── page.tsx
+│   ├── mysqlprisma/
+│   │   ├── api/
+│   │   └── products/
+│   ├── page.tsx
+│   ├── pg/
+│   │   ├── api/
+│   │   └── products/
+│   └── pgprisma/
+│       ├── api/
+│       └── products/
+├── eslint.config.mjs
+├── generate_structure.js
+├── generate_structure.py
+├── lib/
+│   └── db/
+│       └── mysql.ts
+├── next-env.d.ts
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── public/
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── styles/
+│   └── globals.css
+├── tsconfig.json
+└── types/
+    └── products.ts

@@ -1,65 +1,182 @@
-import Image from "next/image";
+import Link from 'next/link';
 
 export default function Home() {
+  const platforms = [
+    {
+      title: "MySQL",
+      description: "Connexion directe avec mysql2. Requêtes SQL pures pour un contrôle total et une vitesse maximale.",
+      icon: "🗄️",
+      href: "/mysql/products",
+      color: "from-primary/20 to-amber-500/20",
+      borderColor: "border-primary/30",
+      tag: "Natif"
+    },
+    {
+      title: "PostgreSQL",
+      description: "Connexion directe avec le pilote pg. Interaction SQL directe, robuste et hautement fiable.",
+      icon: "🐘",
+      href: "/pg/products",
+      color: "from-indigo-500/20 to-primary/20",
+      borderColor: "border-indigo-500/30",
+      tag: "Natif"
+    },
+    {
+      title: "MySQL + Prisma",
+      description: "Prisma ORM avec pilote MariaDB/MySQL. Typage strict, relations déclaratives et requêtes fluides.",
+      icon: "🐬",
+      href: "/mysqlprisma/products",
+      color: "from-amber-500/20 to-primary/20",
+      borderColor: "border-amber-500/30",
+      tag: "ORM"
+    },
+    {
+      title: "PostgreSQL + Prisma",
+      description: "La puissance de l'ORM Prisma combinée à la robustesse et la flexibilité de PostgreSQL.",
+      icon: "⚡",
+      href: "/pgprisma/products",
+      color: "from-purple-500/20 to-indigo-500/20",
+      borderColor: "border-purple-500/30",
+      tag: "ORM"
+    }
+  ];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="min-h-screen">
+      {/* Hero Section Artistique calibrée sur la hauteur de l'écran restante */}
+      <section className="relative min-h-[calc(100vh-5rem)] flex flex-col justify-center overflow-hidden px-4 sm:px-6 py-6 lg:py-0">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Moitié Gauche : Bloc Texte Artistique épuré */}
+            <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col justify-center relative z-10">
+              {/* Badge d'en-tête */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-5 text-xs font-semibold tracking-wider text-amber-300 uppercase bg-primary/10 rounded-full border border-primary/20 backdrop-blur-md w-fit">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
+                </span>
+                <span>Architecture Multi-Bases & Next.js</span>
+              </div>
+
+              {/* Titre Sculptural */}
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] mb-5">
+                <span className="text-white">L'Art du CRUD</span> <br />
+                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                  Multi-Bases Moderne
+                </span>
+              </h1>
+
+              {/* Texte narratif */}
+              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed mb-8 max-w-xl">
+                Une plateforme d'expérimentation haute performance orchestrant{' '}
+                <span className="text-zinc-200 font-semibold">MySQL</span>,{' '}
+                <span className="text-zinc-200 font-semibold">PostgreSQL</span> et{' '}
+                <span className="text-zinc-200 font-semibold">Prisma ORM</span>. 
+                Contrôle SQL natif, typage strict et esthétique contemporaine fusionnent pour sublimer la gestion de vos données.
+              </p>
+
+              {/* Bouton d'Action Principal */}
+              <div>
+                <a
+                  href="#environments"
+                  className="group relative inline-flex items-center p-[2px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_25px_rgba(245,183,39,0.25)] hover:shadow-[0_0_45px_rgba(245,183,39,0.55)] cursor-pointer"
+                >
+                  <span className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#f5b727_340deg,#fff_360deg)] animate-spin-border group-hover:[animation-duration:1.5s]" />
+                  <span className="relative flex items-center gap-2.5 px-7 py-3.5 rounded-[14px] bg-zinc-950/90 group-hover:bg-zinc-900/90 backdrop-blur-2xl transition-all font-bold text-sm sm:text-base text-zinc-100 group-hover:text-white">
+                    <span>Découvrir Les environnements</span>
+                    <svg className="w-4 h-4 group-hover:translate-y-1 transition-transform stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* Moitié Droite : Sculpture d'Art Plastique avec Fusion Organique */}
+            <div className="lg:col-span-5 xl:col-span-5 relative flex items-center justify-center">
+              {/* Halo doré d'ambiance d'arrière-plan */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/25 via-amber-500/15 to-transparent blur-[100px] rounded-full pointer-events-none -z-10" />
+              
+              <div className="relative w-full max-w-[280px] sm:max-w-[400px] lg:max-w-[430px] xl:max-w-[460px] aspect-square flex items-center justify-center animate-float">
+                {/* Lueur arrière directe */}
+                <div className="absolute w-[85%] h-[85%] bg-primary/20 blur-[80px] rounded-full pointer-events-none -z-10" />
+                
+                {/* Sculpture avec masque dégradé uniforme fusionnant dans le fond sombre */}
+                <img
+                  src="/hero-art.jpg"
+                  alt="Sculpture en art plastique représentant le CRUD Next.js et les flux de données"
+                  className="w-full h-full object-cover mask-radial-fade filter drop-shadow-[0_20px_50px_rgba(245,183,39,0.3)] select-none pointer-events-none"
+                />
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Grille des Environnements */}
+      <section id="environments" className="container mx-auto px-4 sm:px-6 pt-20 lg:pt-28 pb-20">
+        <div className="text-center mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+            Choisissez votre environnement de données
+          </h2>
+          <p className="text-zinc-400 text-sm max-w-xl mx-auto">
+            Chaque base de données dispose de ses propres routes API dédiées, tables synchronisées et interfaces CRUD.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Dynamic Matrix */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-2 sm:px-4">          
+          {platforms.map((platform, index) => (
+            <Link
+              key={index}
+              href={platform.href}
+              className={`group relative glass-card p-6 sm:p-8 rounded-3xl overflow-hidden flex flex-col items-start text-left border ${platform.borderColor}`}
+            >
+              {/* Card Background Gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${platform.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+              {/* Tag */}
+              <span className="relative z-10 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-zinc-500 bg-white/5 rounded-full mb-6 border border-white/10">
+                {platform.tag}
+              </span>
+
+              {/* Icon */}
+              <span
+                className="block relative z-10 text-4xl mb-6 transform group-hover:scale-110 transition-transform duration-300 select-none"
+                role="img"
+                aria-label={platform.title}
+                suppressHydrationWarning
+              >
+                {platform.icon}
+              </span>
+
+              {/* Content */}
+              <h3 className="relative z-10 text-xl font-bold text-white mb-3 group-hover:text-primary transition-colors">
+                {platform.title}
+              </h3>
+
+              <p className="relative z-10 text-zinc-400 group-hover:text-zinc-300 text-sm leading-relaxed mb-8">
+                {platform.description}
+              </p>
+
+              {/* Action Button */}
+              <div className="relative z-10 mt-auto flex items-center gap-2 text-sm font-semibold text-white group/btn">
+                <span>Explorer le CRUD</span>
+                <svg
+                  className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </div>
+
+              {/* Decorative Corner Glow */}
+              <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-primary/20 blur-[60px] rounded-full group-hover:bg-primary/40 transition-all duration-500" />
+            </Link>
+          ))}
         </div>
-      </main>
+      </section>
     </div>
   );
 }

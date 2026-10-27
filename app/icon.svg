@@ -1,0 +1,177 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Reflet doré spéculaire éclatant pour le plateau supérieur -->
+    <linearGradient id="favTopGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="20%" stop-color="#FEF08A" />
+      <stop offset="45%" stop-color="#FACC15" />
+      <stop offset="75%" stop-color="#EAB308" />
+      <stop offset="90%" stop-color="#CA8A04" />
+      <stop offset="100%" stop-color="#854D0E" />
+    </linearGradient>
+
+    <!-- Dégradé métallique 3D pour la paroi des cylindres (cylindricité réaliste) -->
+    <linearGradient id="favWallGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#854D0E" />
+      <stop offset="14%" stop-color="#EAB308" />
+      <stop offset="28%" stop-color="#FEF08A" />
+      <stop offset="45%" stop-color="#713F12" />
+      <stop offset="55%" stop-color="#713F12" />
+      <stop offset="72%" stop-color="#FEF08A" />
+      <stop offset="86%" stop-color="#EAB308" />
+      <stop offset="100%" stop-color="#854D0E" />
+    </linearGradient>
+
+    <!-- Ombrage d'interstice entre les étages du cylindre -->
+    <linearGradient id="favGrooveDark" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#451A03" />
+      <stop offset="100%" stop-color="#78350F" />
+    </linearGradient>
+
+    <!-- Dégradé contour doré ultra net -->
+    <linearGradient id="favStrokeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDF0" />
+      <stop offset="50%" stop-color="#FACC15" />
+      <stop offset="100%" stop-color="#92400E" />
+    </linearGradient>
+
+    <!-- Dégradé pour les anneaux intérieurs (ouvertures) -->
+    <radialGradient id="favHoleBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#020617" />
+      <stop offset="70%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </radialGradient>
+  </defs>
+
+  <!-- ==================== ÉTAGE 3 (BASE DU CYLINDRE) ==================== -->
+  <!-- Paroi 3D Étage 3 (de Y=56 à Y=76) -->
+  <path
+    d="M 6 56 
+       C 6 68, 16 78, 28 78 
+       C 40 78, 46 72, 50 68 
+       C 54 72, 60 78, 72 78 
+       C 84 78, 94 68, 94 56 
+       L 94 72 
+       C 94 84, 84 94, 72 94 
+       C 60 94, 54 88, 50 84 
+       C 46 88, 40 94, 28 94 
+       C 16 94, 6 84, 6 72 
+       Z"
+    fill="url(#favWallGrad)"
+    stroke="url(#favStrokeGold)"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Rebord / Anneau intermédiaire Étage 3 -->
+  <path
+    d="M 6 72 
+       C 6 84, 16 94, 28 94 
+       C 40 94, 46 88, 50 84 
+       C 54 88, 60 94, 72 94 
+       C 84 94, 94 84, 94 72"
+    fill="none"
+    stroke="#FEF08A"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+
+  <!-- ==================== ÉTAGE 2 (DISQUE INTERMÉDIAIRE) ==================== -->
+  <!-- Paroi 3D Étage 2 (de Y=38 à Y=56) -->
+  <path
+    d="M 6 38 
+       C 6 50, 16 60, 28 60 
+       C 40 60, 46 54, 50 50 
+       C 54 54, 60 60, 72 60 
+       C 84 60, 94 50, 94 38 
+       L 94 56 
+       C 94 68, 84 78, 72 78 
+       C 60 78, 54 72, 50 68 
+       C 46 72, 40 78, 28 78 
+       C 16 78, 6 68, 6 56 
+       Z"
+    fill="url(#favWallGrad)"
+    stroke="url(#favStrokeGold)"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Rebord / Anneau intermédiaire Étage 2 -->
+  <path
+    d="M 6 56 
+       C 6 68, 16 78, 28 78 
+       C 40 78, 46 72, 50 68 
+       C 54 72, 60 78, 72 78 
+       C 84 78, 94 68, 94 56"
+    fill="none"
+    stroke="#FEF08A"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+
+  <!-- ==================== ÉTAGE 1 (SURFACE DORÉE SUPÉRIEURE) ==================== -->
+  <!-- Paroi 3D Étage 1 (de Y=22 à Y=38) -->
+  <path
+    d="M 6 22 
+       C 6 32, 16 40, 28 40 
+       C 40 40, 46 34, 50 30 
+       C 54 34, 60 40, 72 40 
+       C 84 40, 94 32, 94 22 
+       L 94 38 
+       C 94 50, 84 60, 72 60 
+       C 60 60, 54 54, 50 50 
+       C 46 54, 40 60, 28 60 
+       C 16 60, 6 50, 6 38 
+       Z"
+    fill="url(#favWallGrad)"
+    stroke="url(#favStrokeGold)"
+    stroke-width="2"
+    stroke-linejoin="round"
+  />
+
+  <!-- Plateau supérieur de l'infini (Surface plate dorée avec perspective) -->
+  <path
+    d="M 28 38 
+       C 14 38, 6 29, 6 20 
+       C 6 11, 14 6, 28 6 
+       C 41 6, 47 16, 50 20 
+       C 53 16, 59 6, 72 6 
+       C 86 6, 94 11, 94 20 
+       C 94 29, 86 38, 72 38 
+       C 59 38, 53 24, 50 20 
+       C 47 24, 41 38, 28 38 Z"
+    fill="url(#favTopGold)"
+    stroke="url(#favStrokeGold)"
+    stroke-width="2.5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Ligne de reflet spéculaire supérieur (brillance pure) -->
+  <path
+    d="M 12 19 C 10 14, 17 9, 28 9 C 38 9, 44 15, 48 19"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.95"
+  />
+  <path
+    d="M 52 19 C 56 15, 62 9, 72 9 C 83 9, 90 14, 88 19"
+    fill="none"
+    stroke="#FFFFFF"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    opacity="0.95"
+  />
+
+  <!-- Trous / Anneaux intérieurs (Ouvertures de la boucle infinie) -->
+  <!-- Trou gauche -->
+  <ellipse cx="28" cy="22" rx="9" ry="6" fill="url(#favHoleBg)" stroke="url(#favStrokeGold)" stroke-width="2" />
+  <ellipse cx="28" cy="22" rx="5" ry="3.5" fill="#020617" opacity="0.95" />
+
+  <!-- Trou droit -->
+  <ellipse cx="72" cy="22" rx="9" ry="6" fill="url(#favHoleBg)" stroke="url(#favStrokeGold)" stroke-width="2" />
+  <ellipse cx="72" cy="22" rx="5" ry="3.5" fill="#020617" opacity="0.95" />
+</svg>

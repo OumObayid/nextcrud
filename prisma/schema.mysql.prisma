@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma-mysql"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(150)
+  description String?  @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  image       String?  @db.VarChar(255)
+
+  @@map("products")
+}
