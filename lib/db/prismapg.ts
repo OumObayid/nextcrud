@@ -1,14 +1,22 @@
 /**
  * lib/db/prismapg.ts
  * 
- * Client Prisma configuré pour PostgreSQL.
+ * Client Prisma ORM configuré pour le moteur PostgreSQL.
  * 
- * Fonctionnement clé :
- * 1. Utilise le pool de connexions pg.Pool (identique à lib/db/postgres.ts)
- *    avec @prisma/adapter-pg pour garantir une compatibilité totale avec
- *    les identifiants d'environnement PG_HOST, PG_USER, PG_PASSWORD, etc.
- * 2. Implémente le pattern Singleton sur l'objet global afin d'éviter la
- *    prolifération de connexions concurrentes pendant le rechargement (HMR).
+ * Architecture et Fonctionnement clé :
+ * ────────────────────────────────────
+ * 1. Utilisation conjointe du pilote officiel `pg` (Pool) et de l'adaptateur
+ *    Prisma 7 `@prisma/adapter-pg`.
+ * 2. Prise en charge hybride de la configuration :
+ *    - Priorité 1 : variables d'environnement individuelles (`PG_HOST`, `PG_USER`,
+ *      `PG_PASSWORD`, `PG_DATABASE`, `PG_PORT`). Cette approche est la plus robuste
+ *      sur les hébergements partagés (LWS, cPanel) où les mots de passe peuvent
+ *      contenir des caractères spéciaux (`@`, `%`) problématiques dans une URI.
+ *    - Priorité 2 : chaîne de connexion complète (`DATABASE_URL_PG`).
+ * 3. Pattern Singleton via l'objet `global` Node.js :
+ *    En développement (`npm run dev`), Next.js recharge fréquemment les fichiers (HMR).
+ *    Le Singleton garantit qu'une seule instance du client Prisma et de son pool
+ *    de connexions reste active, évitant l'épuisement du quota de sockets du serveur PostgreSQL.
  */
 
 import { PrismaClient } from '@/app/generated/prisma/client';
@@ -16,15 +24,16 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
 import { config } from "dotenv";
 
-// Chargement préventif des variables .env.local
+// Chargement préventif des variables .env.local (environnement de développement)
 config({ path: ".env.local" });
 
-// Espace global pour le Singleton
+// Espace global typé pour le pattern Singleton
 const globalForPrisma = global as unknown as {
     prisma: PrismaClient;
 };
 
-// Pool PostgreSQL réutilisant la même configuration que lib/db/postgres.ts
+// Construction du pool de connexions PostgreSQL
+// Réutilise exactement la même logique robuste que lib/db/postgres.ts
 const pool = new Pool(
   process.env.PG_HOST
     ? {
@@ -39,10 +48,10 @@ const pool = new Pool(
       }
 );
 
-// Initialisation de l'adaptateur PostgreSQL via le pool pg
+// Initialisation de l'adaptateur Prisma 7 avec le pool PostgreSQL instancié
 const adapter = new PrismaPg(pool);
 
-// Récupération de l'instance mise en cache ou nouvelle instanciation
+// Réutilisation du client en mémoire ou instanciation d'un nouveau client typé
 const prisma = globalForPrisma.prisma || new PrismaClient({
   adapter,
 });
