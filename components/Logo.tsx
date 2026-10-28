@@ -1,10 +1,27 @@
+/**
+ * components/Logo.tsx
+ * 
+ * Composant de marque et Logotype vectoriel (SVG pur).
+ * 
+ * Symbolisme visuel :
+ * - Double cylindre SQL entrecroisé formant le signe de l'infini (∞).
+ * - Représente la continuité et la fluidité des cycles de données CRUD (Create, Read, Update, Delete).
+ * - Finition dorée métallique avec dégradés spéculaires et ombrages de profondeur.
+ * - Typographie contrastée associant "NEXT" (fin et léger) et "CRUD" (robuste et audacieux en dégradé d'or).
+ */
+
 import React from 'react';
 
 interface LogoProps {
+  /** Classes CSS complémentaires appliquées au conteneur externe */
   className?: string;
+  /** Afficher ou masquer le texte 'NEXT CRUD' */
   showText?: boolean;
+  /** Palier de taille prédéfini ('sm' | 'md' | 'lg' | 'xl') */
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  /** Classe Tailwind personnalisée pour forcer les dimensions du symbole */
   symbolClassName?: string;
+  /** Classe Tailwind personnalisée pour forcer la taille du texte */
   textClassName?: string;
 }
 
@@ -79,7 +96,7 @@ export function LogoSymbol({ className = "w-10 h-6" }: { className?: string }) {
 }
 
 /**
- * Logo Horizontal complet : Grand symbole + "NEXT CRUD" (sans v1.0, fond transparent)
+ * Logo horizontal complet associant le symbole infini et le titre NEXT CRUD
  */
 export default function Logo({
   className = "",
@@ -88,7 +105,7 @@ export default function Logo({
   symbolClassName,
   textClassName
 }: LogoProps) {
-  // Tailles agrandies pour mettre en valeur le symbole
+  // Paliers de taille pour le symbole graphique
   const defaultSymbolSizes = {
     sm: "w-10 h-6",
     md: "w-14 h-8 sm:w-16 sm:h-9",
@@ -96,11 +113,12 @@ export default function Logo({
     xl: "w-28 h-15 sm:w-32 sm:h-17"
   };
 
+  // Paliers de taille pour la typographie
   const defaultTextSizes = {
-    sm: "text-base sm:text-lg",
-    md: "text-lg sm:text-xl",
-    lg: "text-2xl sm:text-3xl",
-    xl: "text-3xl sm:text-4xl"
+    sm: "text-xs sm:text-sm",
+    md: "text-sm sm:text-base",
+    lg: "text-lg sm:text-xl",
+    xl: "text-2xl sm:text-3xl"
   };
 
   const activeSymbolClass = symbolClassName || defaultSymbolSizes[size];
@@ -113,7 +131,7 @@ export default function Logo({
         <LogoSymbol className={activeSymbolClass} />
       </div>
 
-      {/* Typographie NEXT CRUD (sans v1.0) */}
+      {/* Typographie NEXT CRUD */}
       {showText && (
         <div className="flex items-center gap-1.5 leading-none">
           <span className={`font-light tracking-wider text-zinc-200 transition-colors group-hover:text-white ${activeTextClass}`}>

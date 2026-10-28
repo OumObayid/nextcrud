@@ -1,5 +1,21 @@
 'use client';
 
+/**
+ * ==============================================================================
+ * Page Détail & Suppression de Produit - Moteur MySQL Natif (Client Component)
+ * ==============================================================================
+ * 
+ * Cette page présente la fiche technique détaillée d'un produit spécifique
+ * et offre la possibilité de modifier ou supprimer ce dernier en toute sécurité.
+ * 
+ * Fonctionnalités :
+ * - Déballage asynchrone des paramètres d'URL avec `use(params)`.
+ * - Chargement initial des données via `GET /api/mysql/products/${id}`.
+ * - Dialogue modal de confirmation de suppression (`ConfirmDeleteModal`)
+ *   pour prévenir toute perte de données accidentelle.
+ * - Exécution de la requête `DELETE /api/mysql/products/${id}` avec redirection.
+ */
+
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -7,14 +23,19 @@ import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
 
 export default function ViewProductPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
+    // Résolution asynchrone de l'ID du produit depuis les paramètres dynamiques
     const { id } = use(params);
 
+    // États locaux
     const [product, setProduct] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [deleting, setDeleting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    /**
+     * Récupération des informations détaillées du produit
+     */
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -35,6 +56,9 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
         fetchProduct();
     }, [id]);
 
+    /**
+     * Confirmation et exécution de la suppression définitive du produit
+     */
     const handleDeleteConfirm = async () => {
         setDeleting(true);
         try {
@@ -44,6 +68,7 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
 
             if (res.ok) {
                 setIsDeleteModalOpen(false);
+                // Retour vers la liste des produits après suppression réussie
                 router.push('/mysql/products');
             } else {
                 const data = await res.json();
@@ -56,6 +81,7 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
         }
     };
 
+    // Indicateur de chargement visuel
     if (loading) {
         return (
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex flex-col items-center justify-center">
@@ -68,6 +94,7 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
         );
     }
 
+    // Gestion du cas où le produit est introuvable ou en cas d'erreur réseau
     if (error || !product) {
         return (
             <div className="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -95,7 +122,7 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
 
     return (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-            {/* Top Navigation Bar */}
+            {/* Barre de navigation supérieure */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <Link
                     href="/mysql/products"
@@ -108,14 +135,12 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
                     </span>
                     <span className="font-medium">Retour aux produits</span>
                 </Link>
-
-
             </div>
 
-            {/* Main Product Card */}
+            {/* Fiche Produit Principale */}
             <div className="glass-card rounded-3xl border border-white/10 overflow-hidden shadow-2xl hover:transform-none hover:scale-100">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
-                    {/* Left: Image Container (sans padding, remplit l'espace) */}
+                    {/* Colonne gauche : Image haute définition */}
                     <div className="md:col-span-5 relative min-h-[260px] border-b md:border-b-0 md:border-r border-white/10 overflow-hidden group">
                         <img
                             src={product.image}
@@ -124,9 +149,9 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
                         />
                     </div>
 
-                    {/* Right: Content Information (adaptable à la taille de la description) */}
+                    {/* Colonne droite : Titre, Prix, Description et Actions */}
                     <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-center gap-4">
-                        {/* Header: Title & Price alignés */}
+                        {/* En-tête : Titre et Prix */}
                         <div className="flex items-center justify-between gap-4 flex-wrap">
                             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
                                 {product.name}
@@ -139,12 +164,12 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
                             </div>
                         </div>
 
-                        {/* Description */}
+                        {/* Description détaillée */}
                         <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 text-zinc-300 text-sm leading-relaxed">
                             {product.description || "Aucune description renseignée pour cet article."}
                         </div>
 
-                        {/* Actions */}
+                        {/* Boutons d'action (Modifier & Supprimer) */}
                         <div className="pt-2 flex flex-wrap sm:flex-nowrap gap-3">
                             <Link
                                 href={`/mysql/products/edit/${id}`}

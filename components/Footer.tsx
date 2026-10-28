@@ -1,17 +1,30 @@
+/**
+ * components/Footer.tsx
+ * 
+ * Pied de page global de l'application (Server Component).
+ * 
+ * Architecture et sections :
+ * 1. Colonne Gauche : Navigation directe vers les 4 environnements CRUD.
+ * 2. Colonne Centrale : Identité de marque (Logo), description synthétique et indicateur de santé système.
+ * 3. Colonne Droite : Coordonnées de contact (Email, Téléphone formaté dynamiquement depuis les variables d'environnement).
+ * 4. Bas de page : Mention de copyright dynamique.
+ */
+
 import Link from "next/link";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
+  // Récupération des coordonnées depuis les variables publiques d'environnement
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_SUPPORT || "contact@oumportfolio.com";
   const rawPhone = process.env.NEXT_PUBLIC_TELEPHONE || "0600000000";
+  // Formatage du numéro de téléphone avec espaces (ex: 06 00 00 00 00)
   const formattedPhone = rawPhone.replace(/(\d{2})(?=\d)/g, "$1 ").trim();
 
   return (
     <footer className="w-full mt-16 md:mt-24 border-t border-white/[0.05] bg-zinc-950/40 backdrop-blur-md pt-10 md:pt-12 pb-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Contenu symétrique, simple et sophistiqué */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-          {/* Colonne Gauche : Environnements */}
+          {/* Colonne Gauche : Accès rapide aux 4 environnements */}
           <div className="flex flex-col items-center md:items-start space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">
               Environnements
@@ -40,7 +53,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Colonne Centrale : Identité de marque NEXT CRUD & Statut */}
+          {/* Colonne Centrale : Identité de marque NEXT CRUD & Statut opérationnel */}
           <div className="flex flex-col items-center text-center space-y-3">
             <Link href="/" className="group inline-flex items-center hover:opacity-90 transition-opacity">
               <Logo size="md" />
@@ -48,13 +61,14 @@ export default function Footer() {
             <div>
               <p className="text-xs text-zinc-500 mt-1">Architecture Multi-Bases Next.js</p>
             </div>
+            {/* Badge de statut avec puce animée */}
             <div className="inline-flex items-center gap-2 text-xs text-zinc-400 bg-zinc-900/80 px-3 py-1 rounded-full border border-white/5">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
               <span>Systèmes opérationnels</span>
             </div>
           </div>
 
-          {/* Colonne Droite : Support & Contact */}
+          {/* Colonne Droite : Liens de Support & Contact direct */}
           <div className="flex flex-col items-center md:items-end space-y-3">
             <span className="text-xs font-bold uppercase tracking-widest text-zinc-400">
               Support & Contact
@@ -89,10 +103,10 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* HR de longueur équilibrée sur mobile et 50vw sur desktop */}
+        {/* Ligne de séparation esthétique avec dégradé radial */}
         <hr className="w-3/4 max-w-md md:w-[50vw] h-px mx-auto border-0 bg-gradient-to-r from-transparent via-zinc-600/70 to-transparent my-8" />
 
-        {/* Copyright sous le HR */}
+        {/* Copyright */}
         <p className="text-center text-xs text-zinc-500 tracking-wider" suppressHydrationWarning>
           © {new Date().getFullYear()} Database CRUD Lab. Tous droits réservés.
         </p>

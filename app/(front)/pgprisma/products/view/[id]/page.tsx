@@ -1,15 +1,28 @@
 'use client';
 
+/**
+ * ==============================================================================
+ * Page Détail & Suppression de Produit - Moteur PostgreSQL + Prisma ORM (Client Component)
+ * ==============================================================================
+ * 
+ * Cette page présente la fiche technique détaillée d'un produit spécifique
+ * issu de PostgreSQL via Prisma ORM et permet de le modifier ou de le supprimer.
+ * 
+ * Fonctionnalités :
+ * - Déballage asynchrone des paramètres d'URL avec `use(params)`.
+ * - Chargement des détails via `GET /api/pgprisma/products/${id}`.
+ * - Dialogue modal de confirmation de suppression (`ConfirmDeleteModal`).
+ * - Exécution de la suppression définitive via `DELETE /api/pgprisma/products/${id}`.
+ */
+
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
 
-/**
- * Page de visualisation d'un produit spécifique (PostgreSQL + Prisma)
- */
 export default function ViewProductPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
+    // Résolution asynchrone de l'ID depuis les paramètres dynamiques
     const { id } = use(params);
 
     const [product, setProduct] = useState<any>(null);
@@ -18,6 +31,9 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
     const [deleting, setDeleting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    /**
+     * Récupération des informations du produit
+     */
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -39,6 +55,9 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
         fetchProduct();
     }, [id]);
 
+    /**
+     * Confirmation et exécution de la suppression
+     */
     const handleDeleteConfirm = async () => {
         setDeleting(true);
         try {
@@ -100,7 +119,7 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
 
     return (
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-            {/* Top Navigation Bar */}
+            {/* Barre de navigation supérieure */}
             <div className="flex flex-wrap items-center justify-between gap-4">
                 <Link
                     href="/pgprisma/products"
@@ -113,14 +132,12 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
                     </span>
                     <span className="font-medium">Retour aux produits</span>
                 </Link>
-
-
             </div>
 
-            {/* Main Product Card */}
+            {/* Fiche Produit Principale */}
             <div className="glass-card rounded-3xl border border-white/10 overflow-hidden shadow-2xl hover:transform-none hover:scale-100">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
-                    {/* Left: Image Container (sans padding, remplit l'espace) */}
+                    {/* Colonne gauche : Image */}
                     <div className="md:col-span-5 relative min-h-[260px] border-b md:border-b-0 md:border-r border-white/10 overflow-hidden group">
                         <img
                             src={product.image || '/placeholder.png'}
@@ -129,9 +146,9 @@ export default function ViewProductPage({ params }: { params: Promise<{ id: stri
                         />
                     </div>
 
-                    {/* Right: Content Information (adaptable à la taille de la description) */}
+                    {/* Colonne droite : Détails */}
                     <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-center gap-4">
-                        {/* Header: Title & Price alignés */}
+                        {/* En-tête : Titre & Prix */}
                         <div className="flex items-center justify-between gap-4 flex-wrap">
                             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight">
                                 {product.name}

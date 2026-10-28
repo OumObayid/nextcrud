@@ -1,16 +1,31 @@
+/**
+ * ==============================================================================
+ * Page Catalogue Produits - Moteur PostgreSQL Natif (Server Component)
+ * ==============================================================================
+ * 
+ * Cette page effectue un rendu côté serveur (SSR) pour interroger et afficher
+ * la liste de tous les produits stockés dans PostgreSQL via le pilote natif `pg`.
+ * 
+ * Caractéristiques :
+ * - `force-dynamic` : Désactive la mise en cache statique pour actualiser instantanément
+ *   les données suite aux opérations CRUD.
+ * - `cache: "no-store"` sur l'appel fetch vers `/api/pg/products`.
+ * - Grille de cartes responsives avec liens de visualisation détaillée et de modification.
+ */
+
 import { Product } from '@/types/products';
 import Link from 'next/link';
 
-// Forcer le rechargement de la page
+// Forcer le rechargement dynamique à chaque requête HTTP
 export const dynamic = 'force-dynamic';
 
-// Page des produits
 export default async function ProductsPage() {
-    // Récupérer les produits depuis l'API
+    // Initialisation des données et de l'état d'erreur
     let products: Product[] = [];
     let error: string | null = null;
 
     try {
+        // Récupération des données auprès de la route API interne
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/pg/products`,
             {
@@ -25,7 +40,7 @@ export default async function ProductsPage() {
         if (!res.ok) {
             throw new Error('Erreur lors du chargement des produits');
         }
-         const result = await res.json();
+        const result = await res.json();
         products = Array.isArray(result) ? result : [];
     } catch (err: any) {
         error = err.message;
@@ -33,13 +48,13 @@ export default async function ProductsPage() {
 
     return (
         <div className="min-h-screen relative p-4 sm:p-6 lg:p-8">
-            {/* Background Background */}
+            {/* Arrière-plan avec dégradé maillé */}
             <div className="bg-mesh" />
 
             <div className="max-w-7xl mx-auto relative z-10">
-                {/* Header Section */}
+                {/* En-tête de la page */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 lg:mb-12">
-                    <div className="relative z-20">
+                    <div className="relative z-20 text-center md:text-left">
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent mb-2">
                             Nos Produits
                         </h1>
@@ -47,15 +62,17 @@ export default async function ProductsPage() {
                             Gérez votre catalogue <span className="inline-block font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">PostgreSQL</span> avec une interface moderne et fluide.
                         </p>
                     </div>
+
+                    {/* Bouton Nouveau Produit */}
                     <Link
                         href="/pg/products/create"
-                        className="relative z-20 group inline-flex items-center p-[2px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_25px_rgba(245,183,39,0.25)] hover:shadow-[0_0_45px_rgba(245,183,39,0.55)]"
+                        className="relative z-20 group inline-flex items-center justify-center w-full sm:w-auto p-[2px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_25px_rgba(245,183,39,0.25)] hover:shadow-[0_0_45px_rgba(245,183,39,0.55)]"
                     >
-                        {/* Faisceau laser rotatif infini (Magic Border Beam) */}
-                        <span className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#f5b727_340deg,#fff_360deg)] animate-spin-border group-hover:[animation-duration:1.5s]" />
+                        {/* Faisceau laser rotatif infini */}
+                        <span className="absolute inset-[-350%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#f5b727_340deg,#fff_360deg)] animate-spin-border group-hover:[animation-duration:1.5s]" />
 
-                        {/* Coeur en verre sombre haute technologie */}
-                        <span className="relative flex items-center gap-3.5 px-6 py-3.5 rounded-[14px] bg-zinc-950/90 group-hover:bg-zinc-900/90 backdrop-blur-2xl transition-all duration-300">
+                        {/* Coeur en verre sombre */}
+                        <span className="relative w-full flex items-center justify-center gap-3.5 px-6 py-3.5 rounded-[14px] bg-zinc-950/90 group-hover:bg-zinc-900/90 backdrop-blur-2xl transition-all duration-300">
                             {/* Balise radar pulsante */}
                             <span className="relative flex h-2 w-2">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
@@ -77,6 +94,7 @@ export default async function ProductsPage() {
                     </Link>
                 </div>
 
+                {/* Gestion des états : Erreur, Liste vide ou Grille */}
                 {error ? (
                     <div className="glass-card p-12 text-center rounded-3xl border-red-500/20">
                         <div className="text-red-500 mb-4 flex justify-center">
@@ -101,7 +119,7 @@ export default async function ProductsPage() {
                                 key={product.id}
                                 className="group glass-card rounded-3xl overflow-hidden hover:border-primary/30 transition-all duration-500 flex flex-col h-full"
                             >
-                                {/* Product Image */}
+                                {/* Image du produit */}
                                 <div className="relative h-56 overflow-hidden">
                                     <img
                                         src={product.image}
@@ -114,7 +132,7 @@ export default async function ProductsPage() {
                                     </div>
                                 </div>
 
-                                {/* Content */}
+                                {/* Contenu texte */}
                                 <div className="p-6 flex flex-col flex-grow">
                                     <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                                         {product.name}

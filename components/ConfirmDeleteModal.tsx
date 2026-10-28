@@ -1,13 +1,31 @@
+/**
+ * components/ConfirmDeleteModal.tsx
+ * 
+ * Modale générique et réutilisable de confirmation de suppression.
+ * 
+ * Fonctionnalités clés :
+ * 1. Sécurité UX : évite les suppressions accidentelles de produits.
+ * 2. Accessibilité : prise en compte de la touche 'Échap' (`Escape`) pour annuler.
+ * 3. Fermeture par clic sur l'arrière-plan avec arrêt de propagation (`stopPropagation`).
+ * 4. État de chargement réactif (`loading`) désactivant les clics pendant la requête API.
+ */
+
 'use client';
 
 import { useEffect } from 'react';
 
 interface ConfirmDeleteModalProps {
+  /** État d'ouverture/visibilité de la modale */
   isOpen: boolean;
+  /** Fonction callback déclenchée pour annuler ou fermer */
   onClose: () => void;
+  /** Fonction callback déclenchée pour confirmer l'action destructive */
   onConfirm: () => void;
+  /** Titre optionnel de la boîte de dialogue */
   title?: string;
+  /** Nom du produit en cours de suppression */
   itemName?: string;
+  /** Indicateur d'appel API en cours */
   loading?: boolean;
 }
 
@@ -19,7 +37,7 @@ export default function ConfirmDeleteModal({
   itemName,
   loading = false,
 }: ConfirmDeleteModalProps) {
-  // Fermeture via la touche Échap
+  // Fermeture accessible via la touche Échap
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen && !loading) {
@@ -37,7 +55,7 @@ export default function ConfirmDeleteModal({
       onClick={!loading ? onClose : undefined}
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
     >
-      {/* Conteneur de la boîte de dialogue */}
+      {/* Conteneur de la boîte de dialogue (stoppe la propagation du clic pour ne pas déclencher le onClose de l'overlay) */}
       <div
         onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-md glass-card rounded-3xl p-6 sm:p-8 border border-red-500/25 shadow-[0_25px_60px_-15px_rgba(239,68,68,0.35)] overflow-hidden scale-in-95 animate-in duration-200"
@@ -79,12 +97,12 @@ export default function ConfirmDeleteModal({
             </div>
           )}
 
-          {/* Avertissement irréversible */}
+          {/* Avertissement d'irréversibilité */}
           <div className="flex items-center gap-2.5 text-xs text-amber-300/90 bg-amber-500/10 border border-amber-500/20 px-3.5 py-2.5 rounded-xl mb-6 text-left">
             <svg className="w-4 h-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
-            <span>Cette action est irréversible et supprimera l'enregistrement de la base.</span>
+            <span>Cette action est irréversible et supprimera l&apos;enregistrement de la base.</span>
           </div>
 
           {/* Boutons d'Action */}

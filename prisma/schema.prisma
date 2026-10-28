@@ -1,19 +1,30 @@
+// ==============================================================================
+// Schéma de Modélisation des Données Prisma (Schema Definition)
+// ==============================================================================
+// 
+// Ce schéma définit la structure relationnelle de la base de données et
+// configure la génération du client TypeScript Prisma.
+//
+// Documentation : https://pris.ly/d/prisma-schema
 
+// 1. Générateur du client Prisma avec dossier de sortie personnalisé
 generator client {
   provider = "prisma-client"
   output   = "../app/generated/prisma"
 }
 
+// 2. Déclaration du connecteur de base de données relationnelle
 datasource db {
   provider = "postgresql"
 }
 
+// 3. Modèle d'entité Produit (mappé sur la table SQL 'products')
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(150)
-  description String?
-  price       Decimal  @db.Decimal(10, 2)
-  image       String?  @db.VarChar(255)
+  id          Int      @id @default(autoincrement()) // Clé primaire auto-incrémentée
+  name        String   @db.VarChar(150)             // Nom du produit (VARCHAR 150)
+  description String?                               // Description textuelle optionnelle
+  price       Decimal  @db.Decimal(10, 2)           // Prix unitaire avec précision décimale (10, 2)
+  image       String?  @db.VarChar(255)             // URL de la vignette du produit (VARCHAR 255)
 
-  @@map("products")
+  @@map("products") // Correspondance directe avec le nom de table SQL existant
 }

@@ -1,20 +1,48 @@
 "use client";
 
+/**
+ * ==============================================================================
+ * Page de Connexion Utilisateur (NextAuth / Client Component)
+ * ==============================================================================
+ * 
+ * Cette page gère l'authentification des utilisateurs avec deux approches :
+ * 1. Authentification locale par identifiants (Email + Mot de passe)
+ *    via le fournisseur "Credentials" de NextAuth.
+ * 2. Authentification fédérée SSO via Google OAuth.
+ * 
+ * Remarque Next.js App Router :
+ * L'utilisation du hook `useSearchParams()` nécessite d'isoler le formulaire
+ * dans un composant enfant entouré d'une frontière `<Suspense>` pour éviter
+ * de désactiver le pré-rendu de la page.
+ */
+
 import { signIn } from "next-auth/react";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
+/**
+ * Composant interne contenant la logique et l'état du formulaire de connexion
+ */
 function LoginForm() {
   const router = useRouter();
+
+  // États locaux des champs de saisie
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // États pour les notifications de statut et le verrouillage de soumission
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const searchParams = useSearchParams();
   const [success, setSuccess] = useState("");
 
+  const searchParams = useSearchParams();
+
+  /**
+   * Analyse des paramètres d'URL au montage du composant :
+   * - `?registered=true` : Notifie l'utilisateur suite à une inscription réussie.
+   * - `?error=...` : Intercepte les codes d'erreur renvoyés par NextAuth (ex. conflits OAuth).
+   */
   useEffect(() => {
     if (searchParams.get("registered")) {
       setSuccess("Compte initialisé avec succès. Veuillez vous identifier pour accéder à votre console.");
@@ -31,12 +59,16 @@ function LoginForm() {
     }
   }, [searchParams]);
 
+  /**
+   * Traitement de la connexion par Email / Mot de passe (NextAuth Credentials)
+   */
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
+      // Exécution de NextAuth signIn sans rechargement de page brutal (redirect: false)
       const result = await signIn("credentials", {
         redirect: false,
         email,
@@ -44,18 +76,23 @@ function LoginForm() {
       });
 
       if (result?.error) {
+        // Mauvais identifiants ou compte introuvable
         setError("Identifiants non reconnus. Veuillez vérifier votre adresse email et votre mot de passe.");
       } else {
+        // Authentification confirmée : navigation fluide vers l'espace protégé
         router.push("/dashboard");
         router.refresh();
       }
-    } catch (err) {
+    } catch {
       setError("Une erreur inattendue est survenue lors de la tentative de connexion.");
     } finally {
       setLoading(false);
     }
   };
 
+  /**
+   * Déclenchement de l'authentification tierce (Google SSO)
+   */
   const socialLogin = (provider: string) => {
     signIn(provider, { callbackUrl: "/dashboard" });
   };
@@ -63,7 +100,7 @@ function LoginForm() {
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-80px)] px-4 py-8 sm:py-12">
       <div className="glass-card w-full max-w-md p-6 sm:p-10 rounded-2xl sm:rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-2xl">
-        {/* Abstract background glow */}
+        {/* Lueur d'ambiance d'arrière-plan */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-all duration-700" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/10 blur-[80px] rounded-full group-hover:bg-purple-500/20 transition-all duration-700" />
 
@@ -75,6 +112,7 @@ function LoginForm() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
+            {/* Alerte de confirmation (après inscription réussie) */}
             {success && (
               <div className="bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs py-3 px-4 rounded-xl flex items-start gap-2.5">
                 <svg className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -83,6 +121,8 @@ function LoginForm() {
                 <span>{success}</span>
               </div>
             )}
+
+            {/* Alerte d'erreur de connexion */}
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-xs py-3 px-4 rounded-xl flex items-start gap-2.5 animate-shake">
                 <svg className="w-4 h-4 shrink-0 mt-0.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,6 +132,7 @@ function LoginForm() {
               </div>
             )}
 
+            {/* Champ Email */}
             <div className="space-y-1.5 text-left">
               <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider ml-1">
                 Adresse email
@@ -106,6 +147,7 @@ function LoginForm() {
               />
             </div>
 
+            {/* Champ Mot de passe */}
             <div className="space-y-1.5 text-left">
               <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider ml-1">
                 Mot de passe
@@ -120,6 +162,7 @@ function LoginForm() {
               />
             </div>
 
+            {/* Bouton de soumission avec indicateur de chargement */}
             <button
               type="submit"
               disabled={loading}
@@ -136,7 +179,7 @@ function LoginForm() {
                 {loading ? (
                   <>
                     <svg className="animate-spin h-5 w-5 text-zinc-950" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" stroke="currentColor" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     <span>Vérification des accès...</span>
@@ -153,6 +196,7 @@ function LoginForm() {
             </button>
           </form>
 
+          {/* Séparateur visuel */}
           <div className="relative my-8">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/10"></div>
@@ -162,6 +206,7 @@ function LoginForm() {
             </div>
           </div>
 
+          {/* Bouton de connexion sociale Google */}
           <button
             onClick={() => socialLogin("google")}
             className="group relative w-full overflow-hidden flex items-center justify-center gap-3 py-3.5 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 rounded-2xl text-white font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-white/5 active:scale-[0.98] cursor-pointer"
@@ -189,6 +234,7 @@ function LoginForm() {
             <span>Continuer avec un compte Google</span>
           </button>
 
+          {/* Lien vers la page d'inscription */}
           <div className="mt-8 text-center">
             <p className="text-zinc-500 text-xs sm:text-sm">
               Vous ne disposez pas d'accès ?{" "}
@@ -206,6 +252,10 @@ function LoginForm() {
   );
 }
 
+/**
+ * Composant racine de la page de connexion
+ * Enveloppe le formulaire dans un conteneur Suspense pour gérer useSearchParams de manière asynchrone
+ */
 export default function LoginPage() {
   return (
     <Suspense

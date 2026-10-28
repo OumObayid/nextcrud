@@ -1,11 +1,22 @@
+/**
+ * app/api/mysqlprisma/products/[id]/route.ts
+ * 
+ * Route Handler dynamique par ID pour MySQL via Prisma ORM : /api/mysqlprisma/products/:id.
+ * 
+ * Méthodes Prisma utilisées :
+ * - `prisma.product.findUnique()` : Recherche par clé primaire indexée.
+ * - `prisma.product.update()`     : Mise à jour atomique avec typage vérifié.
+ * - `prisma.product.delete()`     : Suppression sécurisée par clé primaire.
+ */
+
 import { NextRequest, NextResponse } from 'next/server';
 import prismaMysql from '@/lib/db/prismamysql';
 
 /**
- * GET: Récupère les détails d'un produit MySQL spécifique par son ID via Prisma
+ * GET : Récupère les détails d'un produit MySQL spécifique
  */
 export async function GET(
-    req: NextRequest,
+    _req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
@@ -16,12 +27,13 @@ export async function GET(
             return NextResponse.json({ error: 'ID de produit invalide' }, { status: 400 });
         }
 
+        // Recherche par clé primaire 'id'
         const product = await prismaMysql.product.findUnique({
             where: { id: productId }
         });
 
         if (!product) {
-            return NextResponse.json({ error: 'Produit non trouvé' }, { status: 404 });
+            return NextResponse.json({ error: 'Produit introuvable' }, { status: 404 });
         }
 
         return NextResponse.json(product, { status: 200 });
@@ -35,7 +47,7 @@ export async function GET(
 }
 
 /**
- * PUT: Met à jour un produit existant dans MySQL via Prisma
+ * PUT : Met à jour un produit existant dans MySQL
  */
 export async function PUT(
     req: NextRequest,
@@ -53,7 +65,7 @@ export async function PUT(
         const { name, description, price, image } = body;
 
         if (!name || price === undefined || price === null) {
-            return NextResponse.json({ error: 'Nom et prix sont obligatoires' }, { status: 400 });
+            return NextResponse.json({ error: 'Le nom et le prix sont obligatoires' }, { status: 400 });
         }
 
         const parsedPrice = parseFloat(String(price));
@@ -61,6 +73,7 @@ export async function PUT(
             return NextResponse.json({ error: 'Format de prix invalide' }, { status: 400 });
         }
 
+        // Mise à jour typée via Prisma
         const product = await prismaMysql.product.update({
             where: { id: productId },
             data: {
@@ -82,10 +95,10 @@ export async function PUT(
 }
 
 /**
- * DELETE: Supprime un produit MySQL par son ID via Prisma
+ * DELETE : Supprime un produit par ID dans MySQL
  */
 export async function DELETE(
-    req: NextRequest,
+    _req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
@@ -96,6 +109,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'ID de produit invalide' }, { status: 400 });
         }
 
+        // Suppression de la ligne correspondante
         await prismaMysql.product.delete({
             where: { id: productId }
         });

@@ -1,23 +1,45 @@
 "use client";
 
+/**
+ * ==============================================================================
+ * Page d'Inscription Utilisateur (Client Component)
+ * ==============================================================================
+ * 
+ * Cette page permet à un nouvel opérateur d'enregistrer ses identifiants.
+ * Le formulaire effectue une requête HTTP POST vers l'endpoint `/api/register`.
+ * 
+ * Sécurité & Bonnes pratiques :
+ * - Les champs sont validés côté client avant envoi.
+ * - Le mot de passe sera haché avec bcrypt côté serveur dans la route API.
+ * - En cas de succès, l'utilisateur est redirigé vers `/login?registered=true`.
+ */
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function RegisterPage() {
   const router = useRouter();
+
+  // États locaux du formulaire
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+
+  // Gestion des messages d'erreur et du verrouillage pendant la requête
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Traitement de la création de compte
+   */
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
+      // Transmission des informations saisies à l'API interne d'enregistrement
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,11 +49,13 @@ export default function RegisterPage() {
       const data = await res.json();
 
       if (res.ok) {
+        // Redirection vers l'écran de connexion avec paramètre de succès
         router.push("/login?registered=true");
       } else {
+        // Affichage du message d'erreur retourné par le serveur (ex: email déjà existant)
         setError(data.message || "Impossible de finaliser l'inscription avec les informations fournies.");
       }
-    } catch (err) {
+    } catch {
       setError("Une erreur réseau est survenue lors de la communication avec le serveur.");
     } finally {
       setLoading(false);
@@ -41,6 +65,7 @@ export default function RegisterPage() {
   return (
     <div className="flex justify-center items-center min-h-[calc(100vh-80px)] px-4 py-8 sm:py-12">
       <div className="glass-card w-full max-w-md p-6 sm:p-10 rounded-2xl sm:rounded-[2rem] border border-white/10 relative overflow-hidden group shadow-2xl">
+        {/* Lueur d'ambiance d'arrière-plan */}
         <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 blur-[80px] rounded-full group-hover:bg-primary/30 transition-all duration-700" />
         <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-secondary/15 blur-[80px] rounded-full group-hover:bg-secondary/25 transition-all duration-700" />
 
@@ -52,6 +77,7 @@ export default function RegisterPage() {
           </div>
 
           <form onSubmit={handleRegister} className="space-y-5">
+            {/* Notification d'erreur avec animation de secousse */}
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 text-red-400 text-xs py-3 px-4 rounded-xl flex items-start gap-2.5 animate-shake">
                 <svg className="w-4 h-4 shrink-0 mt-0.5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -61,6 +87,7 @@ export default function RegisterPage() {
               </div>
             )}
 
+            {/* Champ Nom complet */}
             <div className="space-y-1.5 text-left">
               <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider ml-1">
                 Nom complet
@@ -75,6 +102,7 @@ export default function RegisterPage() {
               />
             </div>
 
+            {/* Champ Adresse email */}
             <div className="space-y-1.5 text-left">
               <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider ml-1">
                 Adresse email
@@ -89,6 +117,7 @@ export default function RegisterPage() {
               />
             </div>
 
+            {/* Champ Mot de passe */}
             <div className="space-y-1.5 text-left">
               <label className="block text-xs font-semibold text-zinc-300 uppercase tracking-wider ml-1">
                 Mot de passe
@@ -103,6 +132,7 @@ export default function RegisterPage() {
               />
             </div>
 
+            {/* Bouton de création de compte avec état de chargement */}
             <button
               type="submit"
               disabled={loading}
@@ -119,7 +149,7 @@ export default function RegisterPage() {
                 {loading ? (
                   <>
                     <svg className="animate-spin h-5 w-5 text-zinc-950" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                      <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" stroke="currentColor" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     <span>Création du compte...</span>
@@ -136,6 +166,7 @@ export default function RegisterPage() {
             </button>
           </form>
 
+          {/* Lien vers la page de connexion */}
           <div className="mt-8 text-center">
             <p className="text-zinc-500 text-xs sm:text-sm">
               Vous disposez déjà d'un compte ?{" "}

@@ -1,13 +1,25 @@
 'use client';
 
+/**
+ * ==============================================================================
+ * Page Détail & Suppression de Produit - Moteur MySQL + Prisma ORM (Client Component)
+ * ==============================================================================
+ * 
+ * Cette page présente la fiche technique détaillée d'un produit spécifique
+ * issu de MySQL via Prisma ORM et permet de le modifier ou de le supprimer.
+ * 
+ * Fonctionnalités :
+ * - Lecture de l'identifiant avec `useParams()`.
+ * - Chargement des détails via `GET /api/mysqlprisma/products/${id}`.
+ * - Dialogue modal de confirmation de suppression (`ConfirmDeleteModal`).
+ * - Exécution de la suppression définitive via `DELETE /api/mysqlprisma/products/${id}`.
+ */
+
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import ConfirmDeleteModal from '@/components/ConfirmDeleteModal';
 
-/**
- * Page de visualisation d'un produit spécifique (MySQL + Prisma)
- */
 export default function ViewProductPage() {
     const router = useRouter();
     const routeParams = useParams();
@@ -19,6 +31,9 @@ export default function ViewProductPage() {
     const [deleting, setDeleting] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+    /**
+     * Récupération des données du produit
+     */
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -40,6 +55,9 @@ export default function ViewProductPage() {
         fetchProduct();
     }, [id]);
 
+    /**
+     * Confirmation et exécution de la suppression
+     */
     const handleDeleteConfirm = async () => {
         setDeleting(true);
         try {
@@ -163,7 +181,7 @@ export default function ViewProductPage() {
                 </div>
             </div>
 
-            {/* Modal de confirmation de suppression avec le thème du site */}
+            {/* Modal de confirmation de suppression */}
             <ConfirmDeleteModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}

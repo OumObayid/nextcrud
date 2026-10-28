@@ -1,3 +1,15 @@
+/**
+ * components/DisclaimerModal.tsx
+ * 
+ * Modale d'avertissement et de cadrage pédagogique.
+ * 
+ * Fonctionnement :
+ * - S'affiche uniquement lors de la toute première visite de l'utilisateur.
+ * - Utilise `localStorage` (`next_crud_first_visit_seen`) pour mémoriser l'acquittement.
+ * - Informe le visiteur que ce projet est un banc d'essai d'apprentissage pour
+ *   comparer différentes architectures de bases de données, et non un site commercial.
+ */
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,18 +19,19 @@ export default function DisclaimerModal() {
 
   useEffect(() => {
     try {
-      // Vérifier si le visiteur a déjà vu ce message lors de sa première visite
+      // 1. Vérifier si le visiteur a déjà validé la modale lors d'une session précédente
       const hasSeen = localStorage.getItem("next_crud_first_visit_seen");
       if (!hasSeen) {
-        // Enregistrer dès l'affichage pour garantir qu'il n'apparaîtra qu'une seule fois
+        // Enregistrement préventif pour garantir un affichage unique
         localStorage.setItem("next_crud_first_visit_seen", "true");
+        // Délai court pour laisser le temps au rendu initial et éviter le saut visuel
         const timer = setTimeout(() => {
           setIsOpen(true);
         }, 300);
         return () => clearTimeout(timer);
       }
     } catch {
-      // Sécurité si localStorage est désactivé
+      // Bloc de sécurité si les cookies/localStorage sont bloqués par le navigateur
     }
   }, []);
 
@@ -42,7 +55,7 @@ export default function DisclaimerModal() {
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/20 blur-[50px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 space-y-5">
-          {/* Bouton fermer en haut à droite */}
+          {/* Bouton de fermeture croix */}
           <div className="flex justify-end">
             <button
               onClick={handleClose}
@@ -55,17 +68,17 @@ export default function DisclaimerModal() {
             </button>
           </div>
 
-          {/* Message adapté à l'ensemble du site (sans titre) */}
+          {/* Corps explicatif */}
           <div className="space-y-3.5 text-sm leading-relaxed">
             <p className="font-semibold text-amber-200/95 text-[15px] leading-snug">
-              Ce site est un banc d'essai technique dédié à l'apprentissage et au test des opérations CRUD avec PostgreSQL et MySQL (avec ou sans Prisma ORM).
+              Ce site est un banc d&apos;essai technique dédié à l&apos;apprentissage et au test des opérations CRUD avec PostgreSQL et MySQL (avec ou sans Prisma ORM).
             </p>
             <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">
-              Il ne s'agit pas d'une application commerciale complexe, mais d'un projet personnel conçu comme un laboratoire d'expérimentation pour explorer et comparer la gestion des données (Create, Read, Update, Delete) sur différentes architectures Next.js.
+              Il ne s&apos;agit pas d&apos;une application commerciale complexe, mais d&apos;un projet personnel conçu comme un laboratoire d&apos;expérimentation pour explorer et comparer la gestion des données (Create, Read, Update, Delete) sur différentes architectures Next.js.
             </p>
           </div>
 
-          {/* Bouton de validation */}
+          {/* Bouton d'acquittement */}
           <div className="pt-2">
             <button
               onClick={handleClose}
@@ -73,7 +86,7 @@ export default function DisclaimerModal() {
             >
               <span className="absolute inset-0 bg-gradient-to-r from-primary via-amber-300 to-accent opacity-90 group-hover:opacity-100 transition-opacity" />
               <span className="relative flex items-center justify-center gap-2 px-6 py-3 rounded-[15px] bg-gradient-to-r from-[#d4af37] via-[#c99e28] to-[#b58c1f] text-zinc-950 font-bold text-sm tracking-wide">
-                <span>J'ai compris</span>
+                <span>J&apos;ai compris</span>
                 <svg className="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>

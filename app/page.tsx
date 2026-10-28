@@ -1,3 +1,18 @@
+/**
+ * app/page.tsx
+ * 
+ * Page d'accueil principale (Landing Page - Server Component).
+ * 
+ * Architecture visuelle :
+ * 1. Hero Section :
+ *    - Accroche artistique, badge d'architecture, titre sculptural et texte narratif.
+ *    - Bouton d'action avec rayon lumineux tournant (border animation) menant à l'ancrage `#environments`.
+ *    - Sculpture plastique illustrative en rendu 3D avec masque radial sur desktop.
+ * 2. Section Grille des Environnements (`#environments`) :
+ *    - 4 cartes interactives présentant les 4 stacks technologiques du banc d'essai
+ *      (MySQL Natif, PostgreSQL Natif, MySQL + Prisma, PostgreSQL + Prisma).
+ */
+
 import Link from 'next/link';
 
 export default function Home() {
@@ -43,14 +58,14 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section Artistique calibrée sur la hauteur de l'écran restante */}
-      <section className="relative min-h-[calc(100vh-5rem)] flex flex-col justify-center overflow-hidden px-4 sm:px-6 py-6 lg:py-0">
+      <section className="relative min-h-[calc(100vh-5rem)] flex flex-col justify-center overflow-hidden px-4 sm:px-6 py-10 lg:py-0">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             
-            {/* Moitié Gauche : Bloc Texte Artistique épuré */}
-            <div className="lg:col-span-7 xl:col-span-7 text-left flex flex-col justify-center relative z-10">
-              {/* Badge d'en-tête */}
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-5 text-xs font-semibold tracking-wider text-amber-300 uppercase bg-primary/10 rounded-full border border-primary/20 backdrop-blur-md w-fit">
+            {/* Moitié Gauche : Bloc Texte Artistique épuré (Centré sur mobile, aligné à gauche sur desktop) */}
+            <div className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center items-center lg:items-start text-center lg:text-left relative z-10 max-w-2xl mx-auto lg:max-w-none lg:mx-0">
+              {/* Badge d'en-tête (Masqué sur mobile, affiché sur desktop) */}
+              <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1 mb-4 text-[11px] font-semibold tracking-wider text-amber-300 uppercase bg-primary/10 rounded-full border border-primary/20 backdrop-blur-md w-fit">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
@@ -59,16 +74,16 @@ export default function Home() {
               </div>
 
               {/* Titre Sculptural */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12] mb-5">
-                <span className="text-white">L'Art du CRUD</span> <br />
-                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight sm:leading-[1.15] mb-5 sm:mb-6 lg:mb-4">
+                <span className="text-white">L&apos;Art du CRUD</span> <br />
+                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent inline-block mt-1 sm:mt-0">
                   Multi-Bases Moderne
                 </span>
               </h1>
 
               {/* Texte narratif */}
-              <p className="text-base sm:text-lg text-zinc-400 leading-relaxed mb-8 max-w-xl">
-                Une plateforme d'expérimentation haute performance orchestrant{' '}
+              <p className="text-sm sm:text-base text-zinc-400 leading-relaxed mb-8 lg:mb-6 max-w-lg mx-auto lg:mx-0">
+                Une plateforme d&apos;expérimentation haute performance orchestrant{' '}
                 <span className="text-zinc-200 font-semibold">MySQL</span>,{' '}
                 <span className="text-zinc-200 font-semibold">PostgreSQL</span> et{' '}
                 <span className="text-zinc-200 font-semibold">Prisma ORM</span>. 
@@ -76,15 +91,15 @@ export default function Home() {
               </p>
 
               {/* Bouton d'Action Principal */}
-              <div>
+              <div className="flex justify-center lg:justify-start w-full">
                 <a
                   href="#environments"
                   className="group relative inline-flex items-center p-[2px] rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_25px_rgba(245,183,39,0.25)] hover:shadow-[0_0_45px_rgba(245,183,39,0.55)] cursor-pointer"
                 >
                   <span className="absolute inset-[-200%] bg-[conic-gradient(from_0deg,transparent_0_300deg,#f5b727_340deg,#fff_360deg)] animate-spin-border group-hover:[animation-duration:1.5s]" />
-                  <span className="relative flex items-center gap-2.5 px-7 py-3.5 rounded-[14px] bg-zinc-950/90 group-hover:bg-zinc-900/90 backdrop-blur-2xl transition-all font-bold text-sm sm:text-base text-zinc-100 group-hover:text-white">
+                  <span className="relative flex items-center gap-2 px-6 py-3 rounded-[14px] bg-zinc-950/90 group-hover:bg-zinc-900/90 backdrop-blur-2xl transition-all font-semibold text-xs sm:text-sm text-zinc-100 group-hover:text-white">
                     <span>Découvrir Les environnements</span>
-                    <svg className="w-4 h-4 group-hover:translate-y-1 transition-transform stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5 group-hover:translate-y-1 transition-transform stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   </span>
@@ -92,8 +107,8 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Moitié Droite : Sculpture d'Art Plastique avec Fusion Organique */}
-            <div className="lg:col-span-5 xl:col-span-5 relative flex items-center justify-center">
+            {/* Moitié Droite : Sculpture d'Art Plastique (Masquée sur mobile `hidden`, affichée sur desktop `lg:flex`) */}
+            <div className="hidden lg:flex lg:col-span-5 xl:col-span-5 relative items-center justify-center">
               {/* Halo doré d'ambiance d'arrière-plan */}
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/25 via-amber-500/15 to-transparent blur-[100px] rounded-full pointer-events-none -z-10" />
               

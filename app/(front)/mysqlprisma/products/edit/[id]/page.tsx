@@ -1,5 +1,19 @@
 'use client';
 
+/**
+ * ==============================================================================
+ * Page de Modification de Produit - Moteur MySQL + Prisma ORM (Client Component)
+ * ==============================================================================
+ * 
+ * Cette page permet à l'utilisateur de charger et mettre à jour les informations
+ * d'un produit MySQL au moyen de Prisma ORM.
+ * 
+ * Spécificités Next.js :
+ * - Lecture des paramètres de route dynamiques via `useParams()`.
+ * - Chargement des données au montage du composant via un appel `GET /api/mysqlprisma/products/${id}`.
+ * - Mise à jour asynchrone lors de la soumission via une requête `PUT /api/mysqlprisma/products/${id}`.
+ */
+
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
@@ -17,7 +31,9 @@ export default function EditProductPage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
-    // Charger les données du produit
+    /**
+     * Chargement initial des caractéristiques du produit à modifier
+     */
     useEffect(() => {
         if (!id) return;
         const fetchProduct = async () => {
@@ -43,7 +59,9 @@ export default function EditProductPage() {
         fetchProduct();
     }, [id]);
 
-    // Gestion de la modification
+    /**
+     * Traitement de la modification du produit (PUT)
+     */
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -180,46 +198,46 @@ export default function EditProductPage() {
                             </div>
                         )}
 
-                        <div className="pt-6 flex flex-col sm:flex-row gap-4">
-                            {/* Bouton Annuler Ultra-Sleek */}
+                        <div className="pt-6 flex flex-row items-stretch gap-3 sm:gap-4">
+                            {/* Bouton Annuler */}
                             <button
                                 type="button"
                                 onClick={() => router.back()}
-                                className="group flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-all duration-300 font-medium text-sm active:scale-[0.98]"
+                                className="group flex-1 h-[50px] sm:h-[52px] inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-zinc-400 hover:text-white transition-all duration-300 font-medium text-xs sm:text-sm active:scale-[0.98]"
                             >
-                                <svg className="w-4 h-4 text-zinc-400 group-hover:text-white group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-white group-hover:-translate-x-1 transition-all duration-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
-                                <span>Annuler</span>
+                                <span className="whitespace-nowrap">Annuler</span>
                             </button>
 
-                            {/* Bouton Modifier Haute Performance */}
+                            {/* Bouton Enregistrer */}
                             <button
                                 type="submit"
                                 disabled={saving}
-                                className="group relative flex-[2] overflow-hidden rounded-2xl p-[1px] transition-all duration-300 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-[0_10px_30px_-5px_rgba(181,161,9,0.35)] hover:shadow-[0_15px_40px_-5px_rgba(181,161,9,0.55)]"
+                                className="group relative flex-1 sm:flex-[1.5] h-[50px] sm:h-[52px] overflow-hidden rounded-2xl p-[1px] transition-all duration-300 hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-[0_10px_30px_-5px_rgba(181,161,9,0.35)] hover:shadow-[0_15px_40px_-5px_rgba(181,161,9,0.55)] flex items-stretch"
                             >
                                 <span className="absolute inset-0 bg-gradient-to-r from-primary via-amber-300 to-accent opacity-90 group-hover:opacity-100 transition-opacity" />
 
-                                <span className="relative flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-[15px] bg-gradient-to-r from-[#d4af37] via-[#c99e28] to-[#b58c1f] text-zinc-950 font-bold text-sm tracking-wide transition-all group-hover:brightness-105">
+                                <span className="relative w-full h-full flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 rounded-[15px] bg-gradient-to-r from-[#d4af37] via-[#c99e28] to-[#b58c1f] text-zinc-950 font-bold text-xs sm:text-sm tracking-normal sm:tracking-wide transition-all group-hover:brightness-105 whitespace-nowrap">
                                     <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-1000 ease-out pointer-events-none" />
 
                                     {saving ? (
                                         <>
-                                            <svg className="animate-spin h-5 w-5 text-zinc-950" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                            <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-zinc-950 shrink-0" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" stroke="currentColor" fill="none" />
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                                             </svg>
-                                            <span>Enregistrement...</span>
+                                            <span className="whitespace-nowrap">Enregistrement...</span>
                                         </>
                                     ) : (
                                         <>
-                                            <span className="flex items-center justify-center w-6 h-6 rounded-lg bg-zinc-950/15 border border-zinc-950/20 group-hover:rotate-12 group-hover:scale-110 transition-all duration-300">
-                                                <svg className="w-3.5 h-3.5 text-zinc-950 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                            <span className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-zinc-950/15 border border-zinc-950/20 group-hover:scale-110 transition-all duration-300 shrink-0">
+                                                <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-zinc-950 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                                 </svg>
                                             </span>
-                                            <span>Mettre à jour</span>
+                                            <span className="whitespace-nowrap">Enregistrer</span>
                                         </>
                                     )}
                                 </span>

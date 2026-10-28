@@ -1,18 +1,36 @@
+/**
+ * ==============================================================================
+ * Script de Remplissage Initial de la Base de Données (Database Seeding)
+ * ==============================================================================
+ * 
+ * Ce script permet de peupler la table des produits avec un jeu d'essai complet
+ * et réaliste lors de l'initialisation du projet ou après une réinitialisation de la base.
+ * 
+ * Caractéristiques techniques :
+ * - Utilise Prisma Client 7 avec l'adaptateur de pilote PostgreSQL (`PrismaPg`).
+ * - Se connecte via la variable d'environnement `DATABASE_URL_PG`.
+ * - Déclare un jeu de données varié typé avec `Prisma.ProductCreateInput`.
+ * - Assure une déconnexion propre (`$disconnect`) à la fin du traitement.
+ * 
+ * Exécution :
+ * `npx prisma db seed` (configuré dans package.json sous prisma.seed).
+ */
+
 import { PrismaClient, Prisma } from "../app/generated/prisma/client";
 import { PrismaPg } from '@prisma/adapter-pg';
 import 'dotenv/config';
 
-// on configure dotenv pour charger les variables d'environnement .env.local
+// 1. Initialisation de l'adaptateur de connexion PostgreSQL Prisma
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL_PG,
 });
 
-// on crée une instance de PrismaClient avec l'adapter
+// 2. Instanciation du client Prisma typé avec l'adaptateur de pilote
 const prisma = new PrismaClient({
   adapter,
 });
 
-// on crée les données de produits
+// 3. Définition du catalogue initial de démonstration (12 articles diversifiés)
 const productsData: Prisma.ProductCreateInput[] = [
   {
     name: "T-shirt Classique",
@@ -88,20 +106,24 @@ const productsData: Prisma.ProductCreateInput[] = [
   },
 ];
 
-// fonction main pour créer les produits
+/**
+ * Fonction principale d'insertion séquentielle des produits
+ */
 export async function main() {
+  console.log("Démarrage du peuplement de la base de données...");
   for (const p of productsData) {
     await prisma.product.create({ data: p });
   }
-  console.log("Seed terminé !");
+  console.log("Seed terminé avec succès !");
 }
 
-// exécute la fonction main et ferme la connexion
+// 4. Déclenchement de l'exécution avec gestion d'erreur et libération de connexion
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("Erreur lors de l'exécution du seed :", e);
     process.exit(1);
   })
   .finally(async () => {
+    // Déconnexion systématique du client pour éviter les connexions pendantes
     await prisma.$disconnect();
   });

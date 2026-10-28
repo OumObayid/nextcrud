@@ -1,3 +1,16 @@
+/**
+ * app/layout.tsx
+ * 
+ * Layout racine global (RootLayout) de l'application Next.js (App Router).
+ * 
+ * Fonctionnalités intégrées :
+ * 1. Métadonnées SEO et configuration exhaustive des favicons pour tous appareils.
+ * 2. Injection du thème sombre par défaut (`className="dark"`).
+ * 3. Script pré-hydratation pour nettoyer les attributs parasites injectés par des extensions tierces (ex: Bitdefender).
+ * 4. Enveloppe globale des Providers (NextAuth SessionProvider).
+ * 5. Inclusion des composants permanents : Navbar, DisclaimerModal et Footer.
+ */
+
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import Navbar from "@/components/Navbar";

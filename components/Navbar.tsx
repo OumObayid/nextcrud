@@ -1,3 +1,17 @@
+/**
+ * components/Navbar.tsx
+ * 
+ * Barre de navigation principale responsive et interactive (Client Component).
+ * 
+ * Responsabilités clés :
+ * 1. Logotype réactif menant à l'accueil.
+ * 2. Menu de navigation Desktop (visible >= 1024px) avec pastille lumineuse pour l'onglet actif.
+ * 3. Menu latéral Mobile (tiroir escamotable) avec gestion de l'état ouvert/fermé.
+ * 4. Gestion de session utilisateur NextAuth (boutons Login/Register si déconnecté,
+ *    avatar et menu déroulant avec options Profil/Déconnexion si connecté).
+ * 5. Gestion des événements clavier (Échap) et clics extérieurs pour l'accessibilité.
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -46,8 +60,11 @@ export default function Navbar() {
 
   // Fermer les menus lors d'un changement de page
   useEffect(() => {
-    setDropdownOpen(false);
-    setMobileMenuOpen(false);
+    const timer = setTimeout(() => {
+      setDropdownOpen(false);
+      setMobileMenuOpen(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Fermer le menu mobile automatiquement si la fenêtre est redimensionnée en mode desktop
@@ -102,7 +119,7 @@ export default function Navbar() {
         >
           <Logo
             symbolClassName="w-14 h-8 sm:w-16 sm:h-9 lg:w-20 lg:h-11"
-            textClassName="text-lg sm:text-xl lg:text-2xl"
+            textClassName="text-xs sm:text-sm lg:text-base"
           />
         </Link>
 
@@ -284,9 +301,6 @@ export default function Navbar() {
         >
           {/* Liens de navigation */}
           <div className="space-y-1">
-            <p className="text-[10px] uppercase font-bold tracking-widest text-zinc-500 px-3 mb-2">
-              Banc d'Essai CRUD
-            </p>
             {navLinks.map((link) => {
               const isActive = isLinkActive(link.href);
               return (
@@ -294,51 +308,58 @@ export default function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all ${
                     isActive
-                      ? "bg-primary text-zinc-950 font-bold shadow-[0_0_15px_rgba(245,183,39,0.4)]"
-                      : "text-zinc-300 hover:text-white hover:bg-white/5"
+                      ? "text-amber-400 font-bold bg-white/[0.04]"
+                      : "text-zinc-300 hover:text-white hover:bg-white/5 font-medium"
                   }`}
                 >
                   <span>{link.name}</span>
                   {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-950" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                   )}
                 </Link>
               );
             })}
+
+            {/* Liens Connexion et Inscription à la suite des autres (pas sous forme de boutons) */}
+            {!session?.user && (
+              <>
+                <div className="h-px bg-white/10 my-2" />
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all ${
+                    isLoginActive
+                      ? "text-amber-400 font-bold bg-white/[0.04]"
+                      : "text-zinc-300 hover:text-white hover:bg-white/5 font-medium"
+                  }`}
+                >
+                  <span>Connexion</span>
+                  {isLoginActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  )}
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all ${
+                    isRegisterActive
+                      ? "text-amber-400 font-bold bg-white/[0.04]"
+                      : "text-zinc-300 hover:text-white hover:bg-white/5 font-medium"
+                  }`}
+                >
+                  <span>Inscription</span>
+                  {isRegisterActive && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  )}
+                </Link>
+              </>
+            )}
           </div>
 
-          <div className="h-px bg-white/10 my-3" />
-
-          {/* Section Utilisateur mobile */}
-          {!session?.user ? (
-            <div className="grid grid-cols-2 gap-2 pt-1">
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-center py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all ${
-                  isLoginActive
-                    ? "bg-primary text-zinc-950 font-bold shadow-[0_0_15px_rgba(245,183,39,0.4)]"
-                    : "text-zinc-200 bg-white/5 hover:bg-white/10 border border-white/10"
-                }`}
-              >
-                Connexion
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-center py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
-                  isRegisterActive
-                    ? "bg-primary text-zinc-950 font-bold shadow-[0_0_15px_rgba(245,183,39,0.4)]"
-                    : "bg-primary text-zinc-950 hover:brightness-110 font-bold shadow-[0_0_15px_rgba(245,183,39,0.3)]"
-                }`}
-              >
-                Inscription
-              </Link>
-            </div>
-          ) : (
-            <div className="space-y-3 pt-1">
+          {session?.user && (
+            <div className="space-y-3 pt-2 border-t border-white/10">
               {/* Carte profil utilisateur mobile */}
               <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/10">
                 <span className="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-amber-300 text-zinc-950 font-bold flex items-center justify-center text-sm shrink-0 shadow-sm">

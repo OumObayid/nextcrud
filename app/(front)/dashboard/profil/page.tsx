@@ -2,12 +2,26 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/auth";
 import Link from "next/link";
 
+/**
+ * ==============================================================================
+ * Page de Profil Utilisateur (Server Component)
+ * ==============================================================================
+ * 
+ * Cette page affiche les informations de l'opérateur connecté extraites
+ * de la session NextAuth (nom, adresse email, rôle au sein du banc d'essai).
+ * 
+ * Fonctionnalités :
+ * - Lecture directe et asynchrone de la session côté serveur via `getServerSession`.
+ * - Affichage sécurisé de l'identité sans exposer d'informations critiques (mots de passe).
+ * - Navigation fluide entre la console d'essai et la vue profil.
+ */
 export default async function ProfilPage() {
+  // Récupération des informations de la session active
   const session = await getServerSession(authOptions);
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* En-tête */}
+      {/* En-tête de la page */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 text-[11px] font-semibold tracking-wider text-amber-300 uppercase bg-primary/10 rounded-full border border-primary/25">
@@ -22,7 +36,7 @@ export default async function ProfilPage() {
           </p>
         </div>
 
-        {/* Sélecteur d'onglets */}
+        {/* Sélecteur d'onglets (Banc de Test / Profil) */}
         <div className="inline-flex items-center p-1 rounded-2xl bg-zinc-900/80 border border-white/10 shrink-0">
           <Link
             href="/dashboard"
@@ -36,12 +50,13 @@ export default async function ProfilPage() {
         </div>
       </div>
 
-      {/* Carte d'Identité Utilisateur Sophistiquée */}
+      {/* Carte d'Identité Utilisateur */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 glass-card p-8 rounded-3xl border border-white/10 space-y-6">
           <h2 className="text-lg font-bold text-white">Coordonnées du Compte</h2>
 
           <div className="space-y-4">
+            {/* Nom complet */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b border-white/5">
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                 Nom complet
@@ -51,6 +66,7 @@ export default async function ProfilPage() {
               </span>
             </div>
 
+            {/* Email */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b border-white/5">
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                 Adresse email
@@ -60,6 +76,7 @@ export default async function ProfilPage() {
               </span>
             </div>
 
+            {/* Rôle attribué */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b border-white/5">
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                 Rôle système
@@ -70,6 +87,7 @@ export default async function ProfilPage() {
               </span>
             </div>
 
+            {/* État de la session */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between py-3">
               <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
                 Statut de session
@@ -82,7 +100,7 @@ export default async function ProfilPage() {
           </div>
         </div>
 
-        {/* Panneau d'Information Sandbox */}
+        {/* Panneau latéral d'information bac à sable */}
         <div className="glass-card p-6 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="space-y-4">
             <div className="w-10 h-10 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center">

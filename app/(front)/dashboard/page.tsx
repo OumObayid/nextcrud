@@ -2,9 +2,23 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/auth";
 import Link from "next/link";
 
+/**
+ * ==============================================================================
+ * Page Principale du Tableau de Bord / Console de Test CRUD (Server Component)
+ * ==============================================================================
+ * 
+ * Cette page sert de centre de contrôle pour l'opérateur authentifié.
+ * 
+ * Objectifs :
+ * - Présenter clairement la finalité du banc d'essai (comparaison de 4 architectures de base de données).
+ * - Exposer les 4 environnements CRUD opérationnels avec leurs caractéristiques techniques.
+ * - Offrir des raccourcis directs pour tester les opérations Create, Read, Update, Delete sur chaque moteur.
+ */
 export default async function DashboardPage() {
+  // Récupération des informations de session utilisateur
   const session = await getServerSession(authOptions);
 
+  // Configuration descriptive des 4 bancs d'essai disponibles
   const environments = [
     {
       name: "MySQL Natif",
@@ -46,7 +60,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* En-tête de la Console */}
+      {/* En-tête de la Console avec statut de session */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 text-[11px] font-semibold tracking-wider text-amber-300 uppercase bg-primary/10 rounded-full border border-primary/25">
@@ -64,7 +78,7 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        {/* Sélecteur d'onglets restreints */}
+        {/* Sélecteur d'onglets (Banc de Test / Profil) */}
         <div className="inline-flex items-center p-1 rounded-2xl bg-zinc-900/80 border border-white/10 shrink-0">
           <span className="px-4 py-2 rounded-xl text-xs font-bold text-zinc-950 bg-primary shadow-[0_0_15px_rgba(245,183,39,0.4)]">
             Banc de Test
@@ -78,9 +92,9 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Bannière de Précision de la Mission Exclusive (Rétreinte au test CRUD) */}
+      {/* Bannière de cadrage : Explication du périmètre technique exclusif */}
       <div className="relative overflow-hidden rounded-3xl border border-primary/30 bg-gradient-to-br from-primary/10 via-zinc-900/80 to-zinc-950/90 p-6 sm:p-8 shadow-2xl backdrop-blur-xl">
-        {/* Glow discret d'ambiance */}
+        {/* Glow d'ambiance d'arrière-plan */}
         <div className="absolute top-0 right-0 -mt-10 -mr-10 w-48 h-48 bg-primary/20 blur-[60px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row gap-6 items-start">
@@ -119,7 +133,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* Grille des 4 Bancs d'Essai CRUD */}
+      {/* Grille de sélection des 4 environnements CRUD */}
       <div>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base font-bold text-zinc-200 uppercase tracking-wider text-xs">

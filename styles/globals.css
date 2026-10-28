@@ -1,5 +1,16 @@
+/**
+ * ==============================================================================
+ * Feuille de Styles Globale & Design System (Tailwind CSS v4)
+ * ==============================================================================
+ * 
+ * Définit la palette de couleurs sombres haut de gamme, les variables CSS,
+ * les composants utilitaires (cartes glassmorphism, animations laser de bordure)
+ * et les comportements globaux d'accessibilité (curseurs pointer/disabled).
+ */
+
 @import "tailwindcss";
 
+/* Variables CSS du thème sombre */
 :root {
   --background: #09090b;
   --foreground: #fafafa;
@@ -8,6 +19,7 @@
   --accent: #b0934f;
 }
 
+/* Tokens de thème Tailwind v4 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -18,11 +30,13 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Classes utilitaires personnalisées */
 @layer utilities {
   .animate-gradient {
     background-size: 100% 100%;
   }
 
+  /* Cartes en verre dépoli avec reflets au survol */
   .glass-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px);
@@ -37,10 +51,12 @@
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
+  /* Halo lumineux textuel */
   .text-glow {
     text-shadow: 0 0 15px rgba(245, 183, 39, 0.5);
   }
 
+  /* Animation du faisceau laser tournant sur les boutons haute fidélité */
   @keyframes spin-border {
     0% {
       transform: rotate(0deg);
@@ -54,6 +70,7 @@
     animation: spin-border 3.5s linear infinite;
   }
 
+  /* Animation de flottement organique */
   @keyframes float {
     0%, 100% {
       transform: translateY(0px);
@@ -67,12 +84,14 @@
     animation: float 7s ease-in-out infinite;
   }
 
+  /* Masque de dégradé radial pour fondu fluide */
   .mask-radial-fade {
     mask-image: radial-gradient(circle at center, black 45%, rgba(0, 0, 0, 0.7) 60%, transparent 74%);
     -webkit-mask-image: radial-gradient(circle at center, black 45%, rgba(0, 0, 0, 0.7) 60%, transparent 74%);
   }
 }
 
+/* Styles structurels de base */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -81,7 +100,7 @@ body {
   min-height: 100vh;
 }
 
-/* Forcer le curseur pointer sur tous les éléments cliquables */
+/* Curseur pointer systématique sur tous les éléments d'interaction */
 button, 
 a, 
 input[type="button"], 
@@ -90,13 +109,13 @@ input[type="reset"] {
   cursor: pointer;
 }
 
-/* Exceptions pour les éléments désactivés */
+/* Curseur not-allowed pour les éléments désactivés */
 button:disabled,
 a:disabled {
   cursor: not-allowed;
 }
 
-/* Background animation */
+/* Arrière-plan maillé immersif en dégradés radiaux fixés */
 .bg-mesh {
   position: fixed;
   top: 0;
