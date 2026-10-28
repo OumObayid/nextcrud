@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run prisma:generate && next build",
+    "build": "npm run prisma:generate && next build --webpack",
     "postinstall": "npm run prisma:generate",
     "lint": "eslint",
     "prisma:generate:pg": "prisma generate --schema=prisma/schema.prisma",

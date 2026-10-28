@@ -5,11 +5,19 @@ import type { NextConfig } from "next";
  * Configuration Globale Next.js
  * ==============================================================================
  * 
- * Ce fichier configure le comportement d'exécution du compilateur Next.js.
- * Options extensibles : optimisations d'images distantes, redirections, en-têtes de sécurité, etc.
+ * serverExternalPackages :
+ * Permet d'exclure les drivers natifs et les clients Prisma du bundling
+ * interne Turbopack afin qu'ils soient résolus directement au runtime Node.js.
  */
 const nextConfig: NextConfig = {
-  /* Options de configuration avancées */
+  serverExternalPackages: [
+    "@prisma/adapter-mariadb",
+    "@prisma/adapter-pg",
+    "@prisma/client",
+    "mariadb",
+    "mysql2",
+    "pg",
+  ],
 };
 
 export default nextConfig;
